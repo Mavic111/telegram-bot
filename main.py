@@ -1,10 +1,11 @@
 import httpx
 import asyncio
-import simplejson as json
+import json
 import time
 import sys
 import os
 import aioconsole
+from pydantic import ValidationError
 from config import BOT_API_TOKEN, MAIN_CHANNEL_CHAT_ID
 from model import TelegramgetMeResponse, TelegramMessage, TelegramPhoto, TelegramPoll, TelegramDocument, TelegramAudio, TelegramVideo
 from tele import sendPhoto, sendMessage, sendDocument, sendPoll, getMe, sendAudio, sendVideo
@@ -29,13 +30,6 @@ main_channel_chat_id = MAIN_CHANNEL_CHAT_ID
 '''Add your telegram bot into your channel. Do not forget to make your bot as admin that has access to read and post messages'''
 
 
-
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0'
-
-
-
-
-
 # TELEGRAM UPDATES READER
 async def getUpdates(offset):
     async with httpx.AsyncClient(http2=True) as tele:
@@ -51,6 +45,7 @@ async def getUpdateId(updates):
     update_id = updates['result'][last_update]['update_id']
     return update_id
 
+
 async def updateidandoffset():
     try:
         with open('update_id.txt', encoding="utf8") as u:
@@ -63,6 +58,7 @@ async def updateidandoffset():
     except FileNotFoundError:
         offset = 0
     return update_id, offset
+
 
 async def getpollanswer(pollid):
     while True:
@@ -79,11 +75,11 @@ async def getpollanswer(pollid):
                 pass
 
 
-
 async def welcome(chat_id):
     if not os.path.exists('Data/'+str(chat_id)):
         os.makedirs('Data/'+str(chat_id))
-    await sendMessage(BOT_API_TOKEN=BOT_API_TOKEN, message=TelegramMessage(chat_id=chat_id, text="<b>Welcome to YG Information System<b>", parse_mode="HTML"))
+    await sendMessage(BOT_API_TOKEN=BOT_API_TOKEN, message=TelegramMessage(chat_id=chat_id, text="<b>Welcome to YG Information System</b>", parse_mode="HTML"))
+
 
 async def restart(chat_id):
     choice = await getpollanswer(await sendPoll(BOT_API_TOKEN=BOT_API_TOKEN, poll=TelegramPoll(chat_id=chat_id, question="Are you sure?", options=json.dumps(["Yes", "No"]))))
@@ -120,7 +116,6 @@ async def texthandler(chat_id, text):
         await aioconsole.aprint(exc_type, exc_tb.tb_lineno)
 
 
-
 async def pollanswerhandler(poll_id, answer):
     if os.path.exists('Poll/'+str(poll_id) + '_answer.txt'):
         with open('Poll/'+str(poll_id) + '_answered.txt', 'w') as sa:
@@ -130,18 +125,17 @@ async def pollanswerhandler(poll_id, answer):
         await aioconsole.aprint('Poll is already answered:', poll_id)
 
 
-
 async def main():
     await aioconsole.aprint()
-    await aioconsole.aprint('\33[95mTELEGRAM SYSTEM STARTED\33[0m')
-    bot = TelegramgetMeResponse.parse_obj(await getMe(BOT_API_TOKEN))
-    if bot.ok is True:
+    await aioconsole.aprint('\33[95mTelegram System STARTED\33[0m')
+    try:
+        bot = TelegramgetMeResponse.parse_obj(await getMe(BOT_API_TOKEN))
         await aioconsole.aprint("BOT INFORMATION")
         await aioconsole.aprint(f"ID      : {bot.result.id}")
         await aioconsole.aprint(f"Name    : {bot.result.first_name}")
         await aioconsole.aprint(f"Username: {bot.result.username}")
-    else:
-        await aioconsole.aprint("Error: Bot Configuration Error")
+    except ValidationError:
+        await aioconsole.aprint("Bot Configuration Error")
         sys.exit()
     await aioconsole.aprint()
     await sendMessage(BOT_API_TOKEN=BOT_API_TOKEN, message=TelegramMessage(chat_id=MAIN_CHANNEL_CHAT_ID, text=f"Telegram System ON\n{time.ctime(time.time())}"))
@@ -353,9 +347,11 @@ async def main():
                             await aioconsole.aprint(updates)
             else:
                 pass
-        except (httpx.ConnectTimeout, httpx.ReadTimeout, httpx.ConnectError, httpx.RemoteProtocolError):
+        except httpx.HTTPError as exc:
+            await aioconsole.aprint(f"HTTP Exception for {exc.request.url} - {exc}")
             exc_type, exc_obj, exc_tb = sys.exc_info()
             await aioconsole.aprint(exc_type, exc_tb.tb_lineno)
+
 
 if __name__ == "__main__":
     try:

@@ -1,4 +1,3 @@
-from pydoc import describe
 import aioconsole
 import httpx
 from model import TelegramMessage, TelegramPhoto, TelegramDocument, TelegramPoll, TelegramAudio, TelegramVideo
@@ -9,7 +8,9 @@ import os
 async def getMe(BOT_API_TOKEN: str):
     async with httpx.AsyncClient(http2=True) as tele:
         r = await tele.get(f"https://api.telegram.org/bot{BOT_API_TOKEN}/getMe")
-        return r.json()
+        if r.json()["ok"] is True:
+            return r.json()
+        print(r.text)
 
 
 async def sendMessage(BOT_API_TOKEN: str, message: TelegramMessage):

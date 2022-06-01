@@ -1,5 +1,8 @@
 from pydantic import BaseModel
-from typing import Literal, Optional
+from typing import Literal, Union
+
+
+# Telegram Response
 
 class getMe(BaseModel):
     id: int
@@ -24,22 +27,22 @@ class TelegramMessage(BaseModel):
 class TelegramPhoto(BaseModel):
     chat_id: int
     photo: str
-    caption: Optional[str]
+    caption: Union[str, None]
 
 class TelegramDocument(BaseModel):
     chat_id: int
     document: str
-    caption: Optional[str]
+    caption: Union[str, None]
 
 class TelegramAudio(BaseModel):
     chat_id: int
     audio: str
-    caption: Optional[str]
+    caption: Union[str, None]
 
 class TelegramVideo(BaseModel):
     chat_id: int
     video: str
-    caption: Optional[str]
+    caption: Union[str, None]
 
 class TelegramPoll(BaseModel):
     chat_id: int
