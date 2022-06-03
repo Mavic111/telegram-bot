@@ -14,8 +14,8 @@ from tele import sendPhoto, sendMessage, sendDocument, sendPoll, getMe, sendAudi
 
 print()
 print('###################################################')
-print('\33[95mTelegram Bot System\33[0m')
-print('\33[95mMade by Muhammad Nizamuddin Aulia\33[0m')
+print('Telegram Bot System')
+print('Made by Muhammad Nizamuddin Aulia')
 print('###################################################')
 print()
 
