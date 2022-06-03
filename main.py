@@ -14,8 +14,7 @@ from tele import sendPhoto, sendMessage, sendDocument, sendPoll, getMe, sendAudi
 
 print()
 print('###################################################')
-print('\33[95mTelegram System\33[0m')
-print('\33[95mCopyright by Blegping\33[0m')
+print('\33[95mTelegram Bot System\33[0m')
 print('\33[95mMade by Muhammad Nizamuddin Aulia\33[0m')
 print('###################################################')
 print()
@@ -25,7 +24,7 @@ print()
 URL = 'https://api.telegram.org/bot' + str(BOT_API_TOKEN)
 
 # MAIN CHANNEL
-# Main channel is used for controlling bot from Telegram such as restarting
+# Main channel is used for receiving bot status, such as ON or OFF status.
 main_channel_chat_id = MAIN_CHANNEL_CHAT_ID
 '''Add your telegram bot into your channel. Do not forget to make your bot as admin that has access to read and post messages'''
 

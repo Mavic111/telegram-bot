@@ -10,7 +10,7 @@ async def getMe(BOT_API_TOKEN: str):
         r = await tele.get(f"https://api.telegram.org/bot{BOT_API_TOKEN}/getMe")
         if r.json()["ok"] is True:
             return r.json()
-        print(r.text)
+        await aioconsole.aprint(r.text)
 
 
 async def sendMessage(BOT_API_TOKEN: str, message: TelegramMessage):

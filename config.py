@@ -1,4 +1,4 @@
-# Telegram
+# Telegram BOT API Token
 BOT_API_TOKEN = ""
 
 MAIN_CHANNEL_CHAT_ID = -1001427261111
