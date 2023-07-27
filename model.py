@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Literal, Union
+from typing import Literal, Union, Any
 
 
 # Telegram Response
@@ -22,7 +22,8 @@ class TelegramgetMeResponse(BaseModel):
 class TelegramMessage(BaseModel):
     chat_id: int
     text: str
-    parse_mode: Literal['HTML', 'MarkdownV2'] = "HTML"
+    parse_mode: Literal['HTML', 'MarkdownV2']
+
 
 class TelegramPhoto(BaseModel):
     chat_id: int

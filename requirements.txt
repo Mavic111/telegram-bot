@@ -1,3 +1,0 @@
-httpx==0.23.0
-aioconsole==0.4.1
-pydantic==1.9.1

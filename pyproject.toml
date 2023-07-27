@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "telegram-bot"
+version = "1.0"
+description = "Telegram bot using HTTPX with getUpdates method"
+authors = ["Muhammad Nizamuddin Aulia <muhammadnizamuddinaulia@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+httpx = {extras = ["http2"], version = "^0.24.1"}
+aioconsole = "^0.6.2"
+pydantic = "^2.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
